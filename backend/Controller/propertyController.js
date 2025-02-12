@@ -50,7 +50,7 @@ const addProperties = async (req, res) => {
 
   const getAllProperties = async (req, res) => {
     try {
-      const properties = await propertyModel.find({});
+      const properties = await propertyModel.find();
       res.status(200).json(properties);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -82,8 +82,10 @@ const addProperties = async (req, res) => {
   const deleteProperty = async (req, res) => {
     try {
       const { id } = req.params;
+      console.log(id);
+      
   
-      const deletedProperty = await Property.findByIdAndDelete(id);
+      const deletedProperty = await propertyModel.findByIdAndDelete(id);
   
       if (!deletedProperty) {
         return res.status(404).json({ message: "Property not found" });
@@ -119,15 +121,15 @@ const addProperties = async (req, res) => {
 
   const searchProperties = async (req, res) => {
     try {
-      const { location, price, type, city } = req.query;
+      const { location, price, property_type, } = req.query;
       
       const filter = {};
       if (location) filter.location = { $regex: location, $options: "i" };
-      if (city) filter.city = { $regex: city, $options: "i" };
-      if (type) filter.type = { $regex: type, $options: "i" };
-      if (price) filter.price = { $lte: Number(price) }; // Price should be less than or equal to provided price
+      // if (city) filter.city = { $regex: city, $options: "i" };
+      if (type) filter.type = { $regex: property_type, $options: "i" };
+      if (price) filter.price = { $lte: Number(price) }; 
   
-      const properties = await Property.find(filter);
+      const properties = await propertyModel.find(filter);
       res.status(200).json(properties);
     } catch (error) {
       console.error("Error searching properties:", error);

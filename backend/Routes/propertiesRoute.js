@@ -3,11 +3,11 @@ const { getAllProperties, updateProperty, deleteProperty, getPropertyById, searc
 
 const propertiesRoute=express.Router();
 
-propertiesRoute.get("getProperties",getAllProperties)
-propertiesRoute.put("updateProperty",updateProperty)
-propertiesRoute.delete("deleteProperty",deleteProperty)
-propertiesRoute.get("getPropertyById",getPropertyById)
-propertiesRoute.get("searchProperties",searchProperties)
+propertiesRoute.get("/getProperties",getAllProperties)
+propertiesRoute.put("/updateProperty",updateProperty)
+propertiesRoute.delete("/deleteProperty/:id",deleteProperty)
+propertiesRoute.get("/getPropertyById/:id",getPropertyById)
+propertiesRoute.get("/searchProperties/search",searchProperties)
 
 
 module.exports={propertiesRoute}

@@ -3,7 +3,6 @@ const cors=require("cors")
 
 const { dbConnected } = require("./Config/db")
 const { userRoute } = require("./Routes/userRoute")
-const verifyRole = require("./Middelware/isAuthendicate")
 const { propertiesRoute } = require("./Routes/propertiesRoute")
 
 const app=express()
@@ -15,7 +14,6 @@ app.use(cors({
 require("dotenv").config()
 
 app.use(express.json());
-app.use(cors());
 
 
 app.use("/user",userRoute)
