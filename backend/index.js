@@ -6,7 +6,10 @@ const verifyRole = require("./Middelware/isAuthendicate")
 
 const app=express()
 require("dotenv").config()
-app.use(express.json())
+
+app.use(express.json());
+app.use(cors());
+
 
 app.use("/user",userRoute)
 app.listen(process.env.PORT,()=>{
