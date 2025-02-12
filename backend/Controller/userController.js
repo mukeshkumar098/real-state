@@ -83,7 +83,9 @@ const forgetPassword=async(req,res)=>{
     if(!checkUser){
       res.status(400).send({messsage:"User not Found please register"})
     }
-    const token =jwt.sign({email},process.env.SECRET_KEY,{expiresIn:"1d"})
+    const token =jwt.sign({email},process.env.SECRET_KEY)
+    console.log(token,"token");
+    
     const transporter = nodemailer.createTransport({
       service: "gmail",
       secure: true,
@@ -108,93 +110,35 @@ const forgetPassword=async(req,res)=>{
 }
 
 
-const resetPassword=async(req,res)=>{
+const resetPassword = async (req, res) => {
   try {
-    let {token}=req.params;
-    console.log(token,"token");
-    
-    let {email,password}=req.body;
-    if(!password){
-      res.status(400).send({message:"please provide password"})
+    const { token } = req.params;
+    const { password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({ message: "Token and new password are required" });
     }
- 
+   console.log(token,password);
 
-    console.log(password,"password");
-    
-   jwt.verify(token, process.env.SECRET_KEY,(err,result)=>{
-    console.log(result,"result");
-   });
+   let decode=jwt.verify({token},process.env.SECRET_KEY)
+   console.log(decode);
+   
+   
+  
 
-    
-   const user=await userModel.findOne({email:decode.email})
-
-
-    console.log(user,"bsvjbndfh  g");
-    
-    //  if(!user){
-    //   res.send({
-    //     message:"user not found "
-    //   })
-    //   const hashpassword = await bcrypt.hash(password, 10)
-    //   console.log(hashpassword,"hello")
-
-    //   user.password=hashpassword;
-    //   await user.save()
-    //   // const updatePassword = await userModel.updateOne(
-    //   //     { email },
-    //   //     { $set: { password: hashpassword } }
-    //   // );
-    //   return res.status(200).send({
-    //     message:"passwor forgot successfully and reset successfully"
-    //   })
-    //  }
+   
   } catch (error) {
-      return res.status(500).send({message:"Something went wrong"});
-  }
-}
-
-const addProperties = async (req, res) => {
-  try {
-      const { title, description, price, location } = req.body;
-      console.log(req.user.id,"asdbsdsabdhb");
-      
-      if (!req.user || !req.user.id) {
-          return res.status(401).json({ message: "Unauthorized: Please log in" });
-      }
-
-      const seller = await userModel.findById(req.user.id);
-
-
-      console.log(seller,"seller");
-      
-      if (!seller || seller.role !== "seller") {
-          return res.status(403).json({ message: "Only sellers can add properties" });
-      }
-
-      if (!seller.isVerified) {
-          return res.status(403).json({ message: "You must be verified by an admin to add properties" });
-      }
-
-      if (!title || !description || !price || !location) {
-          return res.status(400).json({ message: "All fields are required" });
-      }
-      const newProperty = new propertyModel({
-          title,
-          description,
-          price,
-          location,
-          seller: req.user.id, 
-      });
-
-      await newProperty.save();
-
-      res.status(201).json({ message: "Property added successfully", property: newProperty });
-  } catch (error) {
-      console.error("Error adding property:", error);
-      res.status(500).json({ message: "Error adding property", error });
+    console.error("Reset Password Error:", error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
-module.exports = addProperties;
+
+
+
+
+
+
+
 
 
 
@@ -204,7 +148,6 @@ module.exports = {
   userLogin,
   forgetPassword,
   resetPassword,
-  addProperties
 };
 
 

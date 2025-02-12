@@ -1,14 +1,33 @@
 const mongoose=require("mongoose")
 
 
-const propertiesSchema=mongoose.Schema({
+const propertiesSchema=mongoose.Schema({ 
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
+    property_type: {
+      type: String,
+      enum: ["Apartment", "House", "Commercial", "Land"],
+      required: true,
+    },
+    images: [{ type: String }], 
     price: { type: Number, required: true },
     location: { type: String, required: true },
-    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the seller
-    createdAt: { type: Date, default: Date.now }
-})
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: ["Available", "Sold", "Rented", "Under Review"],
+      default: "Available",
+    },
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now },
+  },
+  { timestamps: true })
+
+
+
+
 
 
 module.exports=propertiesSchema
