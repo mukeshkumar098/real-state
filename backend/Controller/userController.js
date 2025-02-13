@@ -70,68 +70,7 @@ const userLogin = async (req, res) => {
   }
 };
 
-
-// const forgetPassword=async(req,res)=>{
-//   try {
-//     const {email}=req.body;
-//     if(!email){
-//       res.status(400).send({message:"please provid emaiil"})
-//     }
-//     const checkUser=await userModel.findOne({email});
-//   console.log(checkUser);
-  
-//     if(!checkUser){
-//       res.status(400).send({messsage:"User not Found please register"})
-//     }
-//     const token =jwt.sign({email},process.env.SECRET_KEY)
-//     console.log(token,"token");
-    
-//     const transporter = nodemailer.createTransport({
-//       service: "gmail",
-//       secure: true,
-//       auth: {
-//         user: process.env.MY_GMAIL,
-//         pass: process.env.MY_PASSWORD, // Use `pass` instead of `password`
-//       },
-//     });
-//     const reciever={
-//       from:"",
-//       to:email,
-//       subject:"password reset request",
-//       text:`Click on this link generate your new password ${process.env.CLIENT_URL}/reset-password/${token}`
-//     };
-//     await transporter.sendMail(reciever);
-//     res.status(200).send({message:"password reset link send successfully on your gamil account "})
-//   } catch (error) {
-//     console.log(error)
-//      return res.status(500).send({message:"Something went wrong"});
-
-//   }
-// }
-
-
-// const resetPassword = async (req, res) => {
-//   try {
-//     const { token } = req.params;
-//     const { password } = req.body;
-
-//     if (!token || !password) {
-//       return res.status(400).json({ message: "Token and new password are required" });
-//     }
-//    console.log(token,password);
-
-//    let decode=jwt.verify({token},process.env.SECRET_KEY)
-//    console.log(decode);
-   
-   
-  
-
-   
-//   } catch (error) {
-//     console.error("Reset Password Error:", error);
-//     res.status(500).json({ message: "Something went wrong" });
-//   }
-// };
+// forget pass or reset pass controller
 
 const forgetPassword = async (req, res, next) => {
   try {
