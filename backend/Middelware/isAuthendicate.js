@@ -28,7 +28,7 @@ const { userModel } = require('../Models/userModel');
         return res.status(403).json({ message: `Access denied. Required role: ${roles.join(", ")}` });
       }
       console.log(user.role);
-      
+      console.log()
       next(); 
     } catch (error) {
       console.error("Token Error:", error.message);

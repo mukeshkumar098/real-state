@@ -3,7 +3,7 @@ const { userModel } = require("../Models/userModel");
 
 const addProperties = async (req, res) => {
     try {
-        const { title, description,property_type,latitude,longitude, price, location } = req.body;
+        const { title, description,property_type,latitude,longitude, price, location} = req.body;
         console.log(req.user.id,"asdbsdsabdhb");
         
         if (!req.user || !req.user.id) {
@@ -51,7 +51,9 @@ const addProperties = async (req, res) => {
   const getAllProperties = async (req, res) => {
     try {
       const properties = await propertyModel.find();
-      res.status(200).json(properties);
+      res.status(200).send(properties,
+        message="true"
+      );
     } catch (error) {
       console.error("Error fetching properties:", error);
       res.status(500).json({ message: "Server error" });
@@ -63,26 +65,57 @@ const addProperties = async (req, res) => {
     try {
       const { id } = req.params;
       const updatedData = req.body;
+
+
+      console.log(id,updatedData,"id");
+      
   
-      const updatedProperty = await Property.findByIdAndUpdate(id, updatedData, { new: true });
+      const property = await propertyModel.findById(id);
+      console.log(property,"property");
+      
   
-      if (!updatedProperty) {
+      if (!property) {
         return res.status(404).json({ message: "Property not found" });
       }
+
+      console.log(req.user.id,"ndsffnnfnkj");
+      
   
-      res.status(200).json({ message: "Property updated successfully", property: updatedProperty });
+      if (property.seller.toString() !== req.user.id) {
+        return res.status(403).json({ message: "You are not authorized to update this property" });
+      }
+  
+      const updatedProperty = await propertyModel.findByIdAndUpdate(
+        id,
+        updatedData,
+        { new: true }
+      );
+  
+      res.status(200).json({
+        message: "Property updated successfully",
+        property: updatedProperty,
+      });
     } catch (error) {
       console.error("Error updating property:", error);
       res.status(500).json({ message: "Server error" });
     }
   };
-
+  
 
 
   const deleteProperty = async (req, res) => {
     try {
       const { id } = req.params;
       console.log(id);
+
+
+      
+      const property = await propertyModel.findById(id);
+      console.log(property,"property");
+      
+      if (property.seller.toString() !== req.user.id) {
+        return res.status(403).json({ message: "You are not authorized to update this property" });
+      }
       
   
       const deletedProperty = await propertyModel.findByIdAndDelete(id);
