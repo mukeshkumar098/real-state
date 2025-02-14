@@ -9,7 +9,7 @@ const { userModel } = require('../Models/userModel');
   return async (req, res, next) => {
     try {
       const token = req.headers.authorization?.split(" ")[1]
-      console.log("token",token,"jdnasdbjhb");
+      // console.log("token",token,"jdnasdbjhb");
 
       if (!token) {
         return res.status(401).json({ message: "Access denied. No token provided in Authorization header." });
